@@ -69,3 +69,7 @@ This project includes the following tools:
 ## Author
 
 [Your Name](https://github.com/optimist991)
+
+## Images
+
+![Alien Yoga](/img/logo/alien_yoga.png)
