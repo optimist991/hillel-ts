@@ -30,8 +30,8 @@ To set up the project locally, follow these steps:
 
 1. **Clone the repository**
    ```sh
-   git clone https://github.com/your-username/typescript-homework.git
-   cd typescript-homework
+   git clone https://github.com/optimist991/hillel-ts
+   cd hillel-ts
    ```
 2. **Install dependencies**
    ```sh
