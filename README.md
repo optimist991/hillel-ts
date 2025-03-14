@@ -1,5 +1,8 @@
 # TypeScript Homework Repository
 
+Hello m8! Glad you visited this repo.
+Just want to say to you - Good luck, fella!
+
 ## Overview
 
 This repository contains TypeScript homework assignments, organized by folders (e.g., `homework1`, `homework2`, etc.). Each folder includes TypeScript files with solutions to the assigned tasks.
@@ -68,7 +71,7 @@ This project includes the following tools:
 
 ## Author
 
-[Your Name](https://github.com/optimist991)
+[Andy S.](https://github.com/optimist991)
 
 ## Images
 
