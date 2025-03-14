@@ -72,4 +72,4 @@ This project includes the following tools:
 
 ## Images
 
-![Alien Yoga](/img/logo/alien_yoga.png)
+![Alien Yoga](/hillel-ts/img/logo/alien_yoga.png)
