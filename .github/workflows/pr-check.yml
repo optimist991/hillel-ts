@@ -1,0 +1,25 @@
+name: Run TypeScript File
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-ts-node:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 23
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run TypeScript file with ts-node
+        run: npx ts-node src/homework1/homework1.ts
