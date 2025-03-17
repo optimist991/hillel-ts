@@ -107,21 +107,21 @@ class Student {
 
 // Test code to check if it works
 const school = new School();
-const scienceDirection = new Direction("Science");
-const level1 = new Level("Level 1", "Basic Science Program");
-const groupA = new Group("Science", "Level 1");
+const scienceDirection = new Direction('Science');
+const level1 = new Level('Level 1', 'Basic Science Program');
+const groupA = new Group('Science', 'Level 1');
 
-const student1 = new Student("John", "Doe", 2008);
-const student2 = new Student("Jane", "Smith", 2007);
+const student1 = new Student('John', 'Doe', 2008);
+const student2 = new Student('Jane', 'Smith', 2007);
 
-student1.setGrade("Math", 90);
-student1.setGrade("Physics", 85);
+student1.setGrade('Math', 90);
+student1.setGrade('Physics', 85);
 student1.markAttendance(true);
 student1.markAttendance(true);
 student1.markAttendance(false);
 
-student2.setGrade("Math", 80);
-student2.setGrade("Physics", 95);
+student2.setGrade('Math', 80);
+student2.setGrade('Physics', 95);
 student2.markAttendance(true);
 student2.markAttendance(true);
 student2.markAttendance(true);
@@ -132,5 +132,5 @@ level1.addGroup(groupA);
 scienceDirection.addLevel(level1);
 school.addDirection(scienceDirection);
 
-console.log("School structure:", school);
-console.log("Performance rating sorted:", groupA.showPerformance());
+console.log('School structure:', school);
+console.log('Performance rating sorted:', groupA.showPerformance());
