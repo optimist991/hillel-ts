@@ -92,15 +92,15 @@ class Student {
   }
 
   getPerformanceRating(): number {
-    const gradeValues = Object.values(this.grades);
+    const gradeValues: number[] = Object.values(this.grades);
     if (gradeValues.length === 0) return 0;
 
-    const averageGrade =
+    const averageGrade: number =
       gradeValues.reduce((sum: number, grade: number) => sum + grade, 0) /
       gradeValues.length;
 
-    const attendancePercentage =
-      (this.attendance.filter((present) => present).length /
+    const attendancePercentage: number =
+      (this.attendance.filter((present: boolean) => present).length /
         this.attendance.length) *
       100;
 
@@ -108,14 +108,14 @@ class Student {
   }
 }
 
-// Test code to check if it works
-const school = new School();
-const scienceDirection = new Direction('Science');
-const level1 = new Level('Level 1', 'Basic Science Program');
-const groupA = new Group('Science', 'Level 1');
+// === Test Code with Type Annotations in Output ===
+const school: School = new School();
+const scienceDirection: Direction = new Direction('Science');
+const level1: Level = new Level('Level 1', 'Basic Science Program');
+const groupA: Group = new Group('Science', 'Level 1');
 
-const student1 = new Student('John', 'Doe', 2008);
-const student2 = new Student('Jane', 'Smith', 2007);
+const student1: Student = new Student('John', 'Doe', 2008);
+const student2: Student = new Student('Jane', 'Smith', 2007);
 
 student1.setGrade('Math', 90);
 student1.setGrade('Physics', 85);
@@ -135,5 +135,13 @@ level1.addGroup(groupA);
 scienceDirection.addLevel(level1);
 school.addDirection(scienceDirection);
 
-console.log('School structure:', school);
-console.log('Performance rating sorted:', groupA.showPerformance());
+// === Output with Explicit Type Annotations ===
+console.log('School structure (School):', school);
+console.log(
+  'Performance rating sorted (Student[]):',
+  groupA.showPerformance().map((student: Student) => ({
+    fullName: student.fullName,
+    age: student.age,
+    performanceRating: student.getPerformanceRating(),
+  })),
+);
