@@ -51,7 +51,10 @@ class Group {
   showPerformance(): Student[] {
     return this.students
       .slice()
-      .sort((a, b) => b.getPerformanceRating() - a.getPerformanceRating());
+      .sort(
+        (a: Student, b: Student) =>
+          b.getPerformanceRating() - a.getPerformanceRating(),
+      );
   }
 }
 
