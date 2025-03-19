@@ -22,8 +22,4 @@
 //     c: boolean;
 // }
 
-
 // let name: A & B & C;
-
-
-
