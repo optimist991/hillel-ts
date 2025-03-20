@@ -21,8 +21,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run TypeScript file with ts-node
+      - name: Run TypeScript file with ts-node for Homework1
         run: npx ts-node src/homework1/homework1.ts
 
-      - name: Run TypeScript file with ts-node
+      - name: Run TypeScript file with ts-node for Homework2
         run: npx ts-node src/homework2/homework2.ts
