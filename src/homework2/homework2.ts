@@ -1,136 +1,192 @@
 class School {
-  areas: Area[] = [];
-  lecturers: Lecturer[] = [];
+  private _areas: Area[] = [];
+  private _lecturers: Lecturer[] = [];
+
+  get areas(): Area[] {
+    return this._areas;
+  }
+
+  get lecturers(): Lecturer[] {
+    return this._lecturers;
+  }
 
   addArea(area: Area): void {
-    this.areas.push(area);
+    this._areas.push(area);
   }
 
   removeArea(areaName: string): void {
-    this.areas = this.areas.filter(area => area.name !== areaName);
+    this._areas = this._areas.filter((area) => area.name !== areaName);
   }
 
   addLecturer(lecturer: Lecturer): void {
-    this.lecturers.push(lecturer);
+    this._lecturers.push(lecturer);
   }
 
   removeLecturer(lecturerName: string): void {
-    this.lecturers = this.lecturers.filter(
-      lecturer => `${lecturer.firstName} ${lecturer.lastName}` !== lecturerName
+    this._lecturers = this._lecturers.filter(
+      (lecturer) =>
+        `${lecturer.firstName} ${lecturer.lastName}` !== lecturerName,
     );
   }
 }
 
 class Area {
-  levels: Level[] = [];
-  name: string;
+  private _levels: Level[] = [];
+  private _name: string;
 
   constructor(name: string) {
-    this.name = name;
+    this._name = name;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  get levels(): Level[] {
+    return this._levels;
   }
 
   addLevel(level: Level): void {
-    this.levels.push(level);
+    this._levels.push(level);
   }
 
   removeLevel(levelName: string): void {
-    this.levels = this.levels.filter(level => level.name !== levelName);
+    this._levels = this._levels.filter((level) => level.name !== levelName);
   }
 }
 
 class Level {
-  groups: Group[] = [];
-  name: string;
-  description: string;
+  private _groups: Group[] = [];
+  private _name: string;
+  private _description: string;
 
   constructor(name: string, description: string) {
-    this.name = name;
-    this.description = description;
+    this._name = name;
+    this._description = description;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  get description(): string {
+    return this._description;
+  }
+
+  get groups(): Group[] {
+    return this._groups;
   }
 
   addGroup(group: Group): void {
-    this.groups.push(group);
+    this._groups.push(group);
   }
 
   removeGroup(groupName: string): void {
-    this.groups = this.groups.filter(group => group.levelName !== groupName);
+    this._groups = this._groups.filter(
+      (group) => group.levelName !== groupName,
+    );
   }
 }
 
 class Group {
-  area!: Area;
-  status!: string;
-  students: Student[] = [];
-
-  directionName: string;
-  levelName: string;
+  private _status: string = '';
+  private _students: Student[] = [];
+  private _directionName: string;
+  private _levelName: string;
 
   constructor(directionName: string, levelName: string) {
-    this.directionName = directionName;
-    this.levelName = levelName;
+    this._directionName = directionName;
+    this._levelName = levelName;
+  }
+
+  get directionName(): string {
+    return this._directionName;
+  }
+
+  get levelName(): string {
+    return this._levelName;
+  }
+
+  get status(): string {
+    return this._status;
+  }
+
+  set status(value: string) {
+    this._status = value;
+  }
+
+  get students(): Student[] {
+    return this._students;
   }
 
   addStudent(student: Student): void {
-    this.students.push(student);
+    this._students.push(student);
   }
 
   removeStudent(studentFullName: string): void {
-    this.students = this.students.filter(
-      student => student.fullName !== studentFullName
+    this._students = this._students.filter(
+      (student) => student.fullName !== studentFullName,
     );
   }
 
-  setStatus(status: string): void {
-    this.status = status;
-  }
-
   showPerformance(): Student[] {
-    return this.students.sort((a, b) => b.getPerformanceRating() - a.getPerformanceRating());
+    return [...this._students].sort(
+      (a, b) => b.getPerformanceRating() - a.getPerformanceRating(),
+    );
   }
 }
 
 class Student {
-  firstName: string;
-  lastName: string;
-  birthYear: number;
-  grades: { [workName: string]: number } = {};
-  visits: { [lesson: string]: boolean } = {};
+  private _firstName: string;
+  private _lastName: string;
+  private _birthYear: number;
+  private _grades: { [workName: string]: number } = {};
+  private _visits: { [lesson: string]: boolean } = {};
 
   constructor(firstName: string, lastName: string, birthYear: number) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.birthYear = birthYear;
+    this._firstName = firstName;
+    this._lastName = lastName;
+    this._birthYear = birthYear;
   }
 
   get fullName(): string {
-    return `${this.lastName} ${this.firstName}`;
+    return `${this._lastName} ${this._firstName}`;
   }
 
   set fullName(value: string) {
-    [this.lastName, this.firstName] = value.split(' ');
+    [this._lastName, this._firstName] = value.split(' ');
   }
 
   get age(): number {
-    return new Date().getFullYear() - this.birthYear;
+    return new Date().getFullYear() - this._birthYear;
   }
 
-  setGrade(workName: string, grade: number): void {
-    this.grades[workName] = grade;
+  get grades(): { [workName: string]: number } {
+    return this._grades;
   }
 
-  setVisit(lesson: string, present: boolean): void {
-    this.visits[lesson] = present;
+  get visits(): { [lesson: string]: boolean } {
+    return this._visits;
+  }
+
+  set grade({ workName, grade }: { workName: string; grade: number }) {
+    this._grades[workName] = grade;
+  }
+
+  set visit({ lesson, present }: { lesson: string; present: boolean }) {
+    this._visits[lesson] = present;
   }
 
   getPerformanceRating(): number {
-    const gradeValues = Object.values(this.grades);
-
+    const gradeValues = Object.values(this._grades);
     if (!gradeValues.length) return 0;
 
     const averageGrade =
       gradeValues.reduce((sum, grade) => sum + grade, 0) / gradeValues.length;
     const attendancePercentage =
-      (Object.values(this.visits).filter((present) => present).length / Object.values(this.visits).length) * 100;
+      (Object.values(this._visits).filter((present) => present).length /
+        Object.values(this._visits).length) *
+      100;
 
     return (averageGrade + attendancePercentage) / 2;
   }
@@ -146,11 +202,11 @@ interface Lecturer {
   contacts: string[];
 }
 
-
 // Тестирование
 
 const school = new School();
 
+// Создание областей
 const area1 = new Area('Mathematics');
 const area2 = new Area('Physics');
 
@@ -161,6 +217,7 @@ console.log('School Areas:', school.areas);
 school.removeArea('Physics');
 console.log('School Areas after removal:', school.areas);
 
+// Добавление уровней
 const level1 = new Level('Beginner', 'Introductory level');
 const level2 = new Level('Advanced', 'For advanced students');
 
@@ -171,6 +228,7 @@ console.log('Mathematics Area Levels:', area1.levels);
 area1.removeLevel('Beginner');
 console.log('Mathematics Area Levels after removal:', area1.levels);
 
+// Добавление преподавателя
 const lecturer1: Lecturer = {
   firstName: 'John',
   lastName: 'Doe',
@@ -187,22 +245,24 @@ console.log('School Lecturers:', school.lecturers);
 school.removeLecturer('John Doe');
 console.log('School Lecturers after removal:', school.lecturers);
 
+// Создание группы
 const group = new Group('Mathematics', 'Beginner');
-group.setStatus('Active');
+group.status = 'Active';
 console.log('Group Status:', group.status);
 
+// Создание студентов
 const student1 = new Student('Alice', 'Smith', 2000);
 const student2 = new Student('Bob', 'Johnson', 2001);
 
-student1.setGrade('Homework 1', 90);
-student1.setGrade('Homework 2', 85);
-student1.setVisit('Lesson 1', true);
-student1.setVisit('Lesson 2', false);
+student1.grade = { workName: 'Homework 1', grade: 90 };
+student1.grade = { workName: 'Homework 2', grade: 85 };
+student1.visit = { lesson: 'Lesson 1', present: true };
+student1.visit = { lesson: 'Lesson 2', present: false };
 
-student2.setGrade('Homework 1', 95);
-student2.setGrade('Homework 2', 80);
-student2.setVisit('Lesson 1', true);
-student2.setVisit('Lesson 2', true);
+student2.grade = { workName: 'Homework 1', grade: 95 };
+student2.grade = { workName: 'Homework 2', grade: 80 };
+student2.visit = { lesson: 'Lesson 1', present: true };
+student2.visit = { lesson: 'Lesson 2', present: true };
 
 group.addStudent(student1);
 group.addStudent(student2);
