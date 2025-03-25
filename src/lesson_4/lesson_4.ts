@@ -1,5 +1,5 @@
 // interface
-// // 
+// 
 // import { CANCELLED } from "dns";
 
 // interface Identificator {
