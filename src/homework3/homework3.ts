@@ -12,7 +12,7 @@ interface IPrintable {
 
 // Circle class with implements from IShape in it (but I create calculateArea for tests)
 class Circle implements IShape {
-  readonly name = 'Circle';
+  readonly name: string = 'Circle';
 
   constructor(
     public readonly color: string,
@@ -26,7 +26,7 @@ class Circle implements IShape {
 
 // Rectangle class with implementing from IShape and IPrintable (cause it can be calculated)
 class Rectangle implements IShape, IPrintable {
-  readonly name = 'Rectangle';
+  readonly name: string = 'Rectangle';
 
   constructor(
     public readonly color: string,
@@ -47,7 +47,7 @@ class Rectangle implements IShape, IPrintable {
 
 // Square class with implementing from IShape and IPrintable (can be calculated)
 class Square implements IShape, IPrintable {
-  readonly name = 'Square';
+  readonly name: string = 'Square';
 
   constructor(
     public readonly color: string,
@@ -65,7 +65,7 @@ class Square implements IShape, IPrintable {
 
 // Triangle class with implementing with IShape without IPrintable (but I still create calculateArea for tests)
 class Triangle implements IShape {
-  readonly name = 'Triangle';
+  readonly name: string = 'Triangle';
 
   constructor(
     public readonly color: string,
@@ -79,24 +79,24 @@ class Triangle implements IShape {
 }
 
 // Example for test:
-const circle = new Circle('Red', 30);
+const circle: Circle = new Circle('Red', 30);
 console.log(
   `${circle.name} (Color: ${circle.color}) Area: ${circle.calculateArea()}`,
 );
 
-const rectangle = new Rectangle('Blue', 5, 10);
+const rectangle: Rectangle = new Rectangle('Blue', 5, 10);
 console.log(
   `${rectangle.name} (Color: ${rectangle.color}) Area: ${rectangle.calculateArea()}`,
 );
 rectangle.print();
 
-const square = new Square('Green', 4);
+const square: Square = new Square('Green', 4);
 console.log(
   `${square.name} (Color: ${square.color}) Area: ${square.calculateArea()}`,
 );
 square.print();
 
-const triangle = new Triangle('Yellow', 6, 8);
+const triangle: Triangle = new Triangle('Yellow', 6, 8);
 console.log(
   `${triangle.name} (Color: ${triangle.color}) Area: ${triangle.calculateArea()}`,
 );
