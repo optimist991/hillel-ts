@@ -1,38 +1,43 @@
-// Interface for all shapes - that have same parameters
-interface IShape {
-  readonly color: string;
-  readonly name: string;
-  calculateArea(): number;
+// Abstract clas for all shapes
+abstract class Shape {
+  abstract readonly name: string;
+  abstract calculateArea(): number;
+
+  constructor(public readonly color: string) {}
 }
 
-//Interface for shapes that can print square calculation
-interface IPrintable {
-  print(): void;
+// Abstract class for shapes that can calculate square
+abstract class PrintableShape extends Shape {
+  abstract print(): void;
 }
 
-// Circle class with implements from IShape in it (but I create calculateArea for tests)
-class Circle implements IShape {
+// Circle class extends Shape
+class Circle extends Shape {
   readonly name: string = 'Circle';
 
   constructor(
-    public readonly color: string,
+    color: string,
     public readonly radius: number,
-  ) {}
+  ) {
+    super(color);
+  }
 
   calculateArea(): number {
     return Math.PI * this.radius ** 2;
   }
 }
 
-// Rectangle class with implementing from IShape and IPrintable (cause it can be calculated)
-class Rectangle implements IShape, IPrintable {
+// Rectangle class extends PrintableShape
+class Rectangle extends PrintableShape {
   readonly name: string = 'Rectangle';
 
   constructor(
-    public readonly color: string,
+    color: string,
     public readonly width: number,
     public readonly height: number,
-  ) {}
+  ) {
+    super(color);
+  }
 
   calculateArea(): number {
     return this.width * this.height;
@@ -45,14 +50,16 @@ class Rectangle implements IShape, IPrintable {
   }
 }
 
-// Square class with implementing from IShape and IPrintable (can be calculated)
-class Square implements IShape, IPrintable {
+// Square class extends PrintableShape
+class Square extends PrintableShape {
   readonly name: string = 'Square';
 
   constructor(
-    public readonly color: string,
+    color: string,
     public readonly side: number,
-  ) {}
+  ) {
+    super(color);
+  }
 
   calculateArea(): number {
     return this.side ** 2;
@@ -63,15 +70,17 @@ class Square implements IShape, IPrintable {
   }
 }
 
-// Triangle class with implementing with IShape without IPrintable (but I still create calculateArea for tests)
-class Triangle implements IShape {
+// Triangle class extends Shape
+class Triangle extends Shape {
   readonly name: string = 'Triangle';
 
   constructor(
-    public readonly color: string,
+    color: string,
     public readonly base: number,
     public readonly height: number,
-  ) {}
+  ) {
+    super(color);
+  }
 
   calculateArea(): number {
     return 0.5 * this.base * this.height;
