@@ -1,5 +1,5 @@
 // interface
-// 
+//
 // import { CANCELLED } from "dns";
 
 // interface Identificator {
@@ -24,7 +24,6 @@
 // interface IUser {}
 // interface IIndex {}
 
-
 // Implements
 
 // interface IAnimal {
@@ -45,7 +44,6 @@
 // interface IWildCat {}
 
 // class Lion extends Cat implements IWildCat {}
-
 
 // interface IAnimal {
 //     id: string;
@@ -105,4 +103,3 @@
 // const d: IAnimal[] = c.map((item) => item.create())
 
 // Inline Interface
-
