@@ -29,3 +29,6 @@ jobs:
 
       - name: Run TypeScript file with ts-node for Homework2
         run: npx ts-node src/homework3/homework3.ts
+
+      - name: Run TypeScript file with ts-node for Homework4
+        run: npx ts-node src/homework4/homework4.ts
