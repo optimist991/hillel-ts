@@ -1,3 +1,6 @@
+import * as readline from 'readline';
+import { stdin as input, stdout as output } from 'process';
+
 type Status = 'pending' | 'done';
 
 abstract class Note {
@@ -22,7 +25,7 @@ abstract class Note {
     this.status = 'pending';
   }
 
-  abstract edit(title: string, content: string): void;
+  abstract edit(title: string, content: string): void | Promise<void>;
 
   markAsDone(): void {
     this.status = 'done';
@@ -44,11 +47,28 @@ class DefaultNote extends Note {
 }
 
 class ConfirmableNote extends Note {
-  edit(title: string, content: string): void {
-    const confirmed = confirm(
-      `Are you sure you want to edit Note ID ${this.id}?`,
-    );
-    if (confirmed && title.trim() && content.trim()) {
+  static autoConfirm: boolean = true; // Set to false for local testing
+
+  async edit(title: string, content: string): Promise<void> {
+    if (ConfirmableNote.autoConfirm) {
+      if (title.trim() && content.trim()) {
+        this.title = title;
+        this.content = content;
+        this.updatedAt = new Date();
+      }
+      return;
+    }
+
+    const rl = readline.createInterface({ input, output });
+    const answer = await new Promise<string>((resolve) => {
+      rl.question(
+        `Are you sure you want to edit Note ID ${this.id}? (y/n): `,
+        resolve,
+      );
+    });
+    rl.close();
+
+    if (answer.toLowerCase() === 'y' && title.trim() && content.trim()) {
       this.title = title;
       this.content = content;
       this.updatedAt = new Date();
@@ -67,10 +87,10 @@ class TodoList {
     this.notes = this.notes.filter((note) => note.id !== id);
   }
 
-  editNote(id: number, title: string, content: string): void {
+  async editNote(id: number, title: string, content: string): Promise<void> {
     const note = this.notes.find((n) => n.id === id);
     if (note) {
-      note.edit(title, content);
+      await note.edit(title, content);
     }
   }
 
@@ -111,28 +131,31 @@ class TodoList {
   }
 }
 
-// Test scenarios
+// Main async function to test
+async function main() {
+  const list = new TodoList();
 
-const list = new TodoList();
+  const note1 = new DefaultNote('Buy Milk', 'Remember to buy milk today.');
+  const note2 = new ConfirmableNote('Project', 'Finish TypeScript project.');
 
-const note1 = new DefaultNote('Buy Milk', 'Remember to buy milk today.');
-const note2 = new ConfirmableNote('Project', 'Finish TypeScript project.');
+  list.addNote(note1);
+  list.addNote(note2);
 
-list.addNote(note1);
-list.addNote(note2);
+  note1.markAsDone();
+  await list.editNote(note2.id, 'Updated Project', 'New project content.');
+  list.deleteNote(999); // No error if not found
 
-note1.markAsDone();
-list.editNote(note2.id, 'Updated Project', 'New project content.');
-list.deleteNote(999); // No error if not found
+  console.log('All Notes:', list.getAllNotes());
+  console.log('Pending:', list.getPendingCount());
+  console.log("Search for 'milk':", list.searchNotes('milk'));
+  console.log(
+    'Sorted by status:',
+    list.sortByStatus().map((n) => n.title),
+  );
+  console.log(
+    'Sorted by time:',
+    list.sortByCreatedTime().map((n) => n.title),
+  );
+}
 
-console.log('All Notes:', list.getAllNotes());
-console.log('Pending:', list.getPendingCount());
-console.log("Search for 'milk':", list.searchNotes('milk'));
-console.log(
-  'Sorted by status:',
-  list.sortByStatus().map((n) => n.title),
-);
-console.log(
-  'Sorted by time:',
-  list.sortByCreatedTime().map((n) => n.title),
-);
+main();
