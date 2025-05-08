@@ -3,7 +3,7 @@ import { stdin as input, stdout as output } from 'process';
 
 type Status = 'pending' | 'done';
 
-class Note {
+abstract class Note {
   static idCounter = 1;
   readonly id: number;
   title: string;
@@ -26,11 +26,10 @@ class Note {
   }
 
   edit(title: string, content: string): void {
-    if (title.trim() && content.trim()) {
-      this.title = title;
-      this.content = content;
-      this.updatedAt = new Date();
-    }
+    if (!title.trim() || !content.trim()) return;
+    this.title = title;
+    this.content = content;
+    this.updatedAt = new Date();
   }
 
   markAsDone(): void {
@@ -44,21 +43,14 @@ class Note {
 }
 
 class TodoList {
-  protected notes: Note[] = [];
+  private notes: Note[] = [];
 
   addNote(note: Note): void {
     this.notes.push(note);
   }
 
   deleteNote(id: number): void {
-    this.notes = this.notes.filter((n) => n.id !== id);
-  }
-
-  editNote(id: number, title: string, content: string): void {
-    const note = this.notes.find((n) => n.id === id);
-    if (note) {
-      note.edit(title, content);
-    }
+    this.notes = this.notes.filter((note) => note.id !== id);
   }
 
   getNoteById(id: number): string | undefined {
@@ -79,48 +71,64 @@ class TodoList {
   }
 }
 
-class SearchableTodoList extends TodoList {
-  searchNotes(term: string): Note[] {
-    const lower = term.toLowerCase();
-    return this.notes.filter(
-      (n) =>
-        n.title.toLowerCase().includes(lower) ||
-        n.content.toLowerCase().includes(lower),
-    );
+// This class handles confirmation separately from the Note logic
+class ConfirmingEditor {
+  static isCI = process.env.CI === 'true'; // GitHub Actions sets this to true
+
+  static async editWithConfirmation(
+    note: Note,
+    newTitle: string,
+    newContent: string,
+  ): Promise<void> {
+    if (!newTitle.trim() || !newContent.trim()) return;
+
+    if (this.isCI) {
+      // Automatically confirm in CI environments
+      note.edit(newTitle, newContent);
+      return;
+    }
+
+    const rl = readline.createInterface({ input, output });
+    const answer = await new Promise<string>((resolve) => {
+      rl.question(
+        `Are you sure you want to edit Note ID ${note.id}? (y/n): `,
+        resolve,
+      );
+    });
+    rl.close();
+
+    if (answer.toLowerCase() === 'y') {
+      note.edit(newTitle, newContent);
+    }
   }
 }
 
-class SortableTodoList extends TodoList {
-  sortByStatus(): Note[] {
-    return [...this.notes].sort((a, b) => a.status.localeCompare(b.status));
-  }
+// Test scenarios
+(async () => {
+  const list = new TodoList();
 
-  sortByCreatedTime(): Note[] {
-    return [...this.notes].sort(
-      (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
-    );
-  }
-}
-
-// ✅ Test
-function main() {
-  const list = new SearchableTodoList(); // Can also test SortableTodoList
-  const note1 = new Note('Buy Milk', 'Remember to buy milk today.');
-  const note2 = new Note('Project', 'Finish TypeScript project.');
+  const note1 = new (class extends Note {})(
+    'Buy Milk',
+    'Remember to buy milk today.',
+  );
+  const note2 = new (class extends Note {})(
+    'Project',
+    'Finish TypeScript project.',
+  );
 
   list.addNote(note1);
   list.addNote(note2);
 
   note1.markAsDone();
-  list.editNote(note2.id, 'Updated Project', 'New project content.');
-  list.deleteNote(999); // No error if not found
+
+  await ConfirmingEditor.editWithConfirmation(
+    note2,
+    'Updated Project',
+    'New project content.',
+  );
+
+  list.deleteNote(999); // Should silently fail
 
   console.log('All Notes:', list.getAllNotes());
-  console.log('Pending Count:', list.getPendingCount());
-  console.log(
-    "Search 'milk':",
-    list.searchNotes('milk').map((n) => n.title),
-  );
-}
-
-main();
+  console.log('Pending:', list.getPendingCount());
+})();
